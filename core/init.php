@@ -12,3 +12,5 @@ define('MYSQL_DB_PWD', "123456");
 require_once ROOTPATH . '/vendor/autoload.php';
 //重定向PHP错误日志到logs目录
 ini_set('error_log', ROOTPATH . '/storage/log/php_errors.log');
+//时区
+date_default_timezone_set("PRC");
