@@ -83,7 +83,8 @@ server {
 ```
 域名和代码目录根据你自己的具体路径填写;
 后台需要先导入数据库数据,数据文件在`webroot/Data/united_cron.sql`;
-数据库的配置在:`webroot/Application/Common/Conf/config.php`39~45行,根据你自己的具体mysql连接修改;
+数据库的配置有2个地方,第一个是在:`webroot/Application/Common/Conf/config.php`39~45行,根据你自己的具体mysql连接修改;
+第二个配置在`webroot/Application/User/Conf/config.php`18行:`define('UC_DB_DSN', 'mysql://www:123456@192.168.56.102:3306/united_cron');`;
 登录后台:http://local-cron.ddyc.com/Admin
 用户名:`admin` 密码:`admin`
 
