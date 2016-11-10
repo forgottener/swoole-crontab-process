@@ -1,0 +1,91 @@
+<extend name="Public/base"/>
+
+<block name="body">
+	<div class="main-title">
+		<h2>{$info['id']?'编辑':'新增'}任务</h2>
+	</div>
+	<form action="{:U()}" method="post" class="form-horizontal">
+		<div class="form-item">
+			<label class="item-label">名称<span class="check-tips">（任务名称，不能重复）</span></label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="name" value="{$info.name|default=''}">
+			</div>
+		</div>
+
+		<div class="form-item">
+			<label class="item-label">分组<span class="check-tips">（任务所在的组名）</span></label>
+			<div class="controls">
+				<select name="gid">
+					<option value="0">--点此选择分组--</option>
+					<volist name="group" id="gid">
+						<option value="{$key}">{$gid}</option>
+					</volist>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-item">
+			<label class="item-label">是否为守护进程<span class="check-tips">（守护进程无需填写crontab规则）</span></label>
+			<div class="controls">
+				<select name="is_daemon">
+					<option value="0">否</option>
+					<option value="1">是</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-item">
+			<label class="item-label">规则<span class="check-tips">（如果是后台守护进程,不需要填,默认用"#",如果是定时任务,填写crontab规则,写法<a href="http://tool.lu/crontab/" target="_blank">点这里</a>）</span></label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="rule" value="{$info.rule|default='#'}">
+			</div>
+		</div>
+
+		<div class="form-item">
+			<label class="item-label">命令<span class="check-tips">（执行命令,需要使用绝对路径）</span></label>
+			<div class="controls">
+				<label class="textarea input-large">
+					<textarea name="execute">{$info.execute|default=''}</textarea>
+				</label>
+			</div>
+		</div>
+
+		<div class="form-item">
+			<label class="item-label">进程数<span class="check-tips">（并发进程数）</span></label>
+			<div class="controls">
+				<input type="number" class="text input-small" name="process_num" value="{$info.process_num|default=1}">
+			</div>
+		</div>
+
+		<div class="form-item">
+			<label class="item-label">任务运行用户<span class="check-tips">（linux用户,非root）</span></label>
+			<div class="controls">
+				<input type="text" class="text input-large" name="run_user" value="{$info.run_user|default=''}">
+			</div>
+		</div>
+
+		<div class="form-item">
+			<label class="item-label">agent<span class="check-tips">（执行命令的agent Id,以英文半角","分隔,示例:  1,2）</span></label>
+			<div class="controls">
+				<label class="textarea input-large">
+					<textarea name="agents">{$info.agents|default=''}</textarea>
+				</label>
+			</div>
+		</div>
+
+		<div class="form-item">
+			<input type="hidden" name="id" value="{$info.id|default=''}">
+			<button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+			<button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+		</div>
+	</form>
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+		Think.setValue("gid", {$info.gid|default=0});
+		Think.setValue("is_daemon", {$info.is_daemon|default=1});
+		//导航高亮
+		highlight_subnav('{:U('Task/index')}');
+	</script>
+</block>

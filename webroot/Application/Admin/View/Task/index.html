@@ -1,0 +1,105 @@
+<extend name="Public/base"/>
+
+<block name="body">
+	<div class="main-title">
+		<h2>任务管理 [ <present name="Think.get.gid">
+         <a href="{:U('index')}">全部</a><else/><strong>全部</strong></present>&nbsp;<foreach name="group" item="vo">
+		<neq name="gid" value="$key">
+         <a href="{:U('index?gid='.$key)}">{$vo}</a><else/><strong>{$vo}</strong></neq>&nbsp;
+        </foreach> ]</h2>
+	</div>
+
+	<div class="cf">
+		<a class="btn" href="{:U('add')}">新 增</a>
+        
+		<!-- 高级搜索 -->
+		<div class="search-form fr cf">
+			<div class="sleft">
+				<input type="text" name="name" class="search-input" value="{:I('name')}" placeholder="请输入任务名称">
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('index')}"><i class="btn-search"></i></a>
+			</div>
+		</div>
+	</div>
+
+	<div class="data-table table-striped">
+		<table>
+			<thead>
+				<tr>
+					<th>task_id</th>
+					<th>名称</th>
+					<th>分组</th>
+					<th>是否守护进程</th>
+					<th>规则</th>
+					<th>命令</th>
+					<th>进程数</th>
+					<th>命令用户</th>
+					<th>agent</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<notempty name="list">
+				<volist name="list" id="task">
+					<tr>
+						<td>{$task.id}</td>
+						<td><a href="{:U('edit?id='.$task['id'])}">{$task.name}</a></td>
+						<td><php>echo $group[$task["gid"]]</php></td>
+						<td><eq name="task.is_daemon" value="1">是<else />否</eq></td>
+						<td>{$task.rule}</td>
+						<td>{$task.execute}</td>
+						<td>{$task.process_num}</td>
+						<td>{$task.run_user}</td>
+						<td>{$task.agents}</td>
+						<td><php>echo $taskStatus[$task["status"]]</php></td>
+						<td>
+							<a title="编辑" href="{:U('edit?id='.$task['id'])}">编辑</a>
+
+							<if condition="$task['status'] eq 1">
+								<a href="{:U('changeStatus?method=forbid&id='.$task['id'])}" class="ajax-get">禁用</a>
+								<elseif condition="$task['status'] eq 0" />
+									<a href="{:U('changeStatus?method=resume&id='.$task['id'])}" class="ajax-get">启用</a>
+							</if>
+							<a class="confirm ajax-get" title="删除" href="{:U('del?id='.$task['id'])}">删除</a>
+						</td>
+					</tr>
+				</volist>
+				<else/>
+				<td colspan="11" class="text-center"> aOh! 暂时还没有内容! </td>
+				</notempty>
+			</tbody>
+		</table>
+		<!-- 分页 -->
+	    <div class="page">
+	        {$_page}
+	    </div>
+	</div>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+$(function(){
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+
+});
+</script>
+</block>

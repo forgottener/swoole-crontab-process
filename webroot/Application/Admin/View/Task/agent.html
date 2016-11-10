@@ -1,0 +1,97 @@
+<extend name="Public/base"/>
+
+<block name="body">
+	<div class="main-title">
+		<h2>Agent管理 [ <present name="Think.get.gid">
+			<a href="{:U('agent')}">全部</a><else/><strong>全部</strong></present>&nbsp;<foreach name="group" item="vo">
+			<neq name="gid" value="$key">
+				<a href="{:U('agent?gid='.$key)}">{$vo}</a><else/><strong>{$vo}</strong></neq>&nbsp;
+		</foreach> ]</h2>
+	</div>
+
+	<div class="cf">
+		<a class="btn" href="{:U('addAgent')}">新 增</a>
+
+		<!-- 高级搜索 -->
+		<div class="search-form fr cf">
+			<div class="sleft">
+				<input type="text" name="name" class="search-input" value="{:I('name')}" placeholder="请输入Agent名称">
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('agent')}"><i class="btn-search"></i></a>
+			</div>
+		</div>
+	</div>
+
+	<div class="data-table table-striped">
+		<table>
+			<thead>
+			<tr>
+				<th>agent_id</th>
+				<th>名称</th>
+				<th>分组</th>
+				<th>ip</th>
+				<th>端口</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+			</thead>
+			<tbody>
+			<notempty name="list">
+				<volist name="list" id="agent">
+					<tr>
+						<td>{$agent.id}</td>
+						<td><a href="{:U('editAgent?id='.$agent['id'])}">{$agent.name}</a></td>
+						<td><php>echo $group[$agent["gid"]]</php></td>
+						<td>{$agent.ip}</td>
+						<td>{$agent.port}</td>
+						<td><php>echo $taskStatus[$agent["status"]]</php></td>
+						<td>
+							<a title="编辑" href="{:U('editAgent?id='.$agent['id'])}">编辑</a>
+
+							<if condition="$agent['status'] eq 1">
+								<a href="{:U('changeAgentStatus?method=forbid&id='.$agent['id'])}" class="ajax-get">禁用</a>
+								<elseif condition="$agent['status'] eq 0" />
+								<a href="{:U('changeAgentStatus?method=resume&id='.$agent['id'])}" class="ajax-get">启用</a>
+							</if>
+							<a class="confirm ajax-get" title="删除" href="{:U('delAgent?id='.$agent['id'])}">删除</a>
+						</td>
+					</tr>
+				</volist>
+				<else/>
+				<td colspan="7" class="text-center"> aOh! 暂时还没有内容! </td>
+			</notempty>
+			</tbody>
+		</table>
+		<!-- 分页 -->
+		<div class="page">
+			{$_page}
+		</div>
+	</div>
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+		$(function(){
+			//搜索功能
+			$("#search").click(function(){
+				var url = $(this).attr('url');
+				var query  = $('.search-form').find('input').serialize();
+				query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+				query = query.replace(/^&/g,'');
+				if( url.indexOf('?')>0 ){
+					url += '&' + query;
+				}else{
+					url += '?' + query;
+				}
+				window.location.href = url;
+			});
+			//回车搜索
+			$(".search-input").keyup(function(e){
+				if(e.keyCode === 13){
+					$("#search").click();
+					return false;
+				}
+			});
+
+		});
+	</script>
+</block>
