@@ -17,8 +17,7 @@ class AgentsModel extends Model
 {
 
     protected $_validate = array(
-        array('name', 'require', '任务名不能为空', self::EXISTS_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('name', '', '任务名已经存在', self::VALUE_VALIDATE, 'unique', self::MODEL_BOTH),
+        array('name', 'require', 'agent名不能为空', self::EXISTS_VALIDATE, 'regex', self::MODEL_BOTH),
         array('ip', 'require', 'ip不能为空', self::MUST_VALIDATE , 'regex', self::MODEL_BOTH),
         array('port', 'require', '端口不能为空', self::MUST_VALIDATE , 'regex', self::MODEL_BOTH),
     );

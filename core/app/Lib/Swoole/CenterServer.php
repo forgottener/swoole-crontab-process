@@ -154,6 +154,14 @@ class CenterServer
                             );
                             $server->task($sql);
                         }
+                    } else {
+                        //agent不在数据库里,插入
+                        $sql = array(
+                            'type' => 'insert',
+                            'sql' => 'insert into agents (`gid`,`name`,`ip`,`port`,`status`,`create_time`) values (?,?,?,?,?,?)',
+                            'param' => [0, $data['params']['hostname'], $data['params']['ip'], $data['params']['port'], 0, time()]
+                        );
+                        $server->task($sql);
                     }
                     break;
                 case "notify" :
@@ -184,6 +192,8 @@ class CenterServer
             $res = $statement->fetchAll(\PDO::FETCH_ASSOC);
         } else if ($sql['type'] == "update") {
             $res = $statement->rowCount();
+        } else if ($sql['type'] == "insert") {
+            $res = $this->pdo->lastInsertId();
         }
         return $res;
     }

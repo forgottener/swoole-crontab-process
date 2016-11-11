@@ -57,12 +57,12 @@ class AgentServer
                 if ($centerClient->connect(CENTER_IP, CENTER_PORT, 0.5)) {
                     $agentIp = "0.0.0.0";
                     foreach (swoole_get_local_ip() as $v) {
-                        if (substr($v, 0, 7) == '192.168')
+                        if (substr($v, 0, 7) == '192.168' || substr($v, 0, 5) == '10.10')
                         {
                             $agentIp = $v;
                         }
                     }
-                    $centerClient->send(json_encode( ["call" => "heart beat","params" => ['ip' => $agentIp, 'port' => AGENT_PORT]]) . "\r\n");
+                    $centerClient->send(json_encode( ["call" => "heart beat","params" => ['hostname' => gethostname(), 'ip' => $agentIp, 'port' => AGENT_PORT]]) . "\r\n");
                 } else {
                     $this->monolog->error('connect heart beat center Client failed');
                 }
