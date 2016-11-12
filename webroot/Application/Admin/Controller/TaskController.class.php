@@ -50,6 +50,20 @@ class TaskController extends AdminController
         }
 
         $list = $this->lists('Crontab', $map,'id');
+        $tids = [];
+        foreach ($list as &$v) {
+            $v['agents'] = explode("," ,$v['agents']);
+            $tids[] = $v['id'];
+        }
+        $agentInfo = [];
+        if ($tids) {
+            $res = M('crontab_agent')->where(['task_id' => ['IN', $tids]])->getField('aid', true);
+            $aids = array_unique($res);
+            if ($aids) {
+                $agentInfo = M('agents')->where(['id' => ["IN", $aids]])->getField('id,ip');
+            }
+        }
+        $this->assign('agentInfo', $agentInfo);
         // 记录当前列表页的cookie
         Cookie('__forward__',$_SERVER['REQUEST_URI']);
 
@@ -62,13 +76,14 @@ class TaskController extends AdminController
     public function add()
     {
         if (IS_POST) {
+            $postData = I('post.');
+            $postData['agents'] = implode(",", $postData['agents']);
             $Crontab = D('Crontab');
-            $data = $Crontab->create();
+            $data = $Crontab->create($postData);
             if ($data) {
                 if ($tid = $Crontab->add()) {
                     //新增crontab_agent关联表数据
-                    $aids = array_unique(explode("," ,I('agents')));
-                    $Crontab->relateAgent($tid, $aids, 'add');
+                    $Crontab->relateAgent($tid, I('agents'), 'add');
 
                     //记录行为
                     action_log('add_crontab','crontab',$tid,UID);
@@ -81,7 +96,21 @@ class TaskController extends AdminController
             }
         } else {
             $this->meta_title = '新增任务';
+            $groupAgents = [];
+            if (!empty($this->group)) {
+                $map['gid'] = ["IN", array_keys($this->group)];
+                $map['status'] = ["EGT", 0];
+                $agents = D("Agents")->where($map)->select();
+                foreach ($this->group as $key => $value) {
+                    foreach ($agents as $v) {
+                        if ($v['gid'] == $key) {
+                            $groupAgents[$value][] = ['id' => $v['id'], 'name' => $v['name'], 'ip' => $v['ip'], 'selected' => 0];
+                        }
+                    }
+                }
+            }
             $this->assign('group', $this->group);
+            $this->assign('groupAgents', $groupAgents);
             $this->assign('info',null);
             $this->display('edit');
         }
@@ -93,13 +122,14 @@ class TaskController extends AdminController
     public function edit($id = 0)
     {
         if (IS_POST) {
+            $postData = I('post.');
+            $postData['agents'] = implode(",", $postData['agents']);
             $Crontab = D('Crontab');
-            $data = $Crontab->create();
+            $data = $Crontab->create($postData);
             if ($data) {
                 if ($Crontab->save()) {
                     //更新crontab_agent关联关系
-                    $aids = array_unique(explode("," ,I('agents')));
-                    $Crontab->relateAgent($data['id'], $aids, 'edit');
+                    $Crontab->relateAgent($data['id'], I('agents'), 'edit');
 
                     //记录行为
                     action_log('update_crontab','crontab',$data['id'],UID);
@@ -119,7 +149,28 @@ class TaskController extends AdminController
             if(false === $info){
                 $this->error('获取任务信息错误');
             }
+
+            $groupAgents = [];
+            $selectedAgents = explode(",", $info['agents']);
+            if (!empty($this->group)) {
+                $map['gid'] = ["IN", array_keys($this->group)];
+                $map['status'] = ["EGT", 0];
+                $agents = D("Agents")->where($map)->select();
+                foreach ($this->group as $key => $value) {
+                    foreach ($agents as $v) {
+                        if ($v['gid'] == $key) {
+                            if (in_array($v['id'], $selectedAgents)) {
+                                $groupAgents[$value][] = ['id' => $v['id'], 'name' => $v['name'], 'ip' => $v['ip'], 'selected' => 1];
+                            } else {
+                                $groupAgents[$value][] = ['id' => $v['id'], 'name' => $v['name'], 'ip' => $v['ip'], 'selected' => 0];
+                            }
+
+                        }
+                    }
+                }
+            }
             $this->assign('info', $info);
+            $this->assign('groupAgents', $groupAgents);
             $this->meta_title = '编辑任务';
             $this->display();
         }
@@ -209,7 +260,7 @@ class TaskController extends AdminController
                 if ($aid = $Agent->add()) {
                     //记录行为
                     action_log('add_agent','agents',$aid,UID);
-                    $this->success('新增成功', U('index'));
+                    $this->success('新增成功', U('agent'));
                 } else {
                     $this->error('新增失败');
                 }
@@ -269,11 +320,9 @@ class TaskController extends AdminController
         switch ( strtolower($method) ){
             case 'forbid':
                 $res = D('Agents')->changeStatus($_REQUEST['id'], 0);
-                //$res = D('Agents')->where(['id' => $_REQUEST['id']])->save(['status' => 0, 'update_time' => NOW_TIME]);
                 break;
             case 'resume':
                 $res = D('Agents')->changeStatus($_REQUEST['id'], 1);
-                //$res = D('Agents')->where(['id' => $_REQUEST['id']])->save(['status' => 1, 'update_time' => NOW_TIME]);
                 break;
             default:
                 $this->error($method.'参数非法');

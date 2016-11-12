@@ -47,10 +47,14 @@
 						<td><php>echo $group[$task["gid"]]</php></td>
 						<td><eq name="task.is_daemon" value="1">是<else />否</eq></td>
 						<td>{$task.rule}</td>
-						<td>{$task.execute}</td>
+						<td style="width: 8%;">{$task.execute}</td>
 						<td>{$task.process_num}</td>
 						<td>{$task.run_user}</td>
-						<td>{$task.agents}</td>
+						<td>
+							<volist name="task.agents" id="agent">
+								<p>{$agent} : <php>echo $agentInfo[$agent]</php></p>
+							</volist>
+						</td>
 						<td><php>echo $taskStatus[$task["status"]]</php></td>
 						<td>
 							<a title="编辑" href="{:U('edit?id='.$task['id'])}">编辑</a>

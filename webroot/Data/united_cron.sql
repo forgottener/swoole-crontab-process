@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2016-11-10 11:21:03
+Date: 2016-11-11 13:15:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -119,7 +119,7 @@ CREATE TABLE `agents` (
 -- ----------------------------
 -- Records of agents
 -- ----------------------------
-INSERT INTO `agents` VALUES ('1', '1', '本地虚拟机', '192.168.56.102', '9501', '0', '1478505090', '1478746610', '1478746608');
+INSERT INTO `agents` VALUES ('1', '0', 'forgottener', '192.168.56.102', '9501', '0', '1478831944', null, null);
 
 -- ----------------------------
 -- Table structure for attribute
@@ -230,9 +230,9 @@ CREATE TABLE `auth_group` (
 -- ----------------------------
 -- Records of auth_group
 -- ----------------------------
-INSERT INTO `auth_group` VALUES ('1', 'admin', '1', '运维组', '运维组', '1', '1,3,5,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,80,81,82,83,84,86,87,88,89,90,91,92,93,94,95,100,102,103,107,108,109,110,205,206,207,208,212,213,214,215,216,218,219,220,221');
-INSERT INTO `auth_group` VALUES ('2', 'admin', '1', 'PHP组', 'PHP组', '1', '1,108,109,219,220,221');
-INSERT INTO `auth_group` VALUES ('3', 'admin', '1', 'JAVA组', 'JAVA组', '1', '1,108,109,219,220,221');
+INSERT INTO `auth_group` VALUES ('1', 'admin', '1', '运维组', '运维组', '1', '3,5,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,80,81,82,83,84,86,87,88,89,90,91,92,93,94,95,100,102,103,107,108,109,110,205,206,207,208,212,213,214,215,216,218,219,220,221,222,223,224,225');
+INSERT INTO `auth_group` VALUES ('2', 'admin', '1', 'PHP组', 'PHP组', '1', '108,109,219,220,221,222,223,224');
+INSERT INTO `auth_group` VALUES ('3', 'admin', '1', 'JAVA组', 'JAVA组', '1', '108,109,219,220,221,222,223,224');
 
 -- ----------------------------
 -- Table structure for auth_group_access
@@ -264,7 +264,7 @@ CREATE TABLE `auth_rule` (
   `condition` varchar(300) NOT NULL DEFAULT '' COMMENT '规则附加条件',
   PRIMARY KEY (`id`),
   KEY `module` (`module`,`status`,`type`)
-) ENGINE=MyISAM AUTO_INCREMENT=222 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=226 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of auth_rule
@@ -487,6 +487,10 @@ INSERT INTO `auth_rule` VALUES ('218', 'admin', '1', 'Admin/think/lists', '数�
 INSERT INTO `auth_rule` VALUES ('219', 'admin', '1', 'Admin/Task/index', '任务列表', '1', '');
 INSERT INTO `auth_rule` VALUES ('220', 'admin', '2', 'Admin/Task/index', '任务', '1', '');
 INSERT INTO `auth_rule` VALUES ('221', 'admin', '1', 'Admin/Task/agent', 'Agent列表', '1', '');
+INSERT INTO `auth_rule` VALUES ('222', 'admin', '1', 'Admin/Task/add', '新增任务', '1', '');
+INSERT INTO `auth_rule` VALUES ('223', 'admin', '1', 'Admin/Task/edit', '编辑任务', '1', '');
+INSERT INTO `auth_rule` VALUES ('224', 'admin', '1', 'Admin/Task/changeStatus', '启用/停用任务', '1', '');
+INSERT INTO `auth_rule` VALUES ('225', 'admin', '1', 'Admin/Task/del', '删除任务', '1', '');
 
 -- ----------------------------
 -- Table structure for config
@@ -565,11 +569,11 @@ CREATE TABLE `crontab` (
 -- ----------------------------
 -- Records of crontab
 -- ----------------------------
-INSERT INTO `crontab` VALUES ('1', '1', '测试', '#', '6', '/usr/local/php7/bin/php /home/Code/unitedCron/core/test.php', '1', '1', 'vagrant', '1', '1478500162', '1478746285');
-INSERT INTO `crontab` VALUES ('2', '2', '测试二', '*/1 * * * *', '1', '/usr/local/php7/bin/php /home/Code/unitedCron/core/test2.php', '0', '1', 'vagrant', '1', '1478500162', '1478746296');
+INSERT INTO `crontab` VALUES ('1', '1', '测试', '#', '1', '/usr/local/php7/bin/php /home/Code/unitedCron/core/test.php', '1', '1', 'vagrant', '0', '1478500162', '1478768826');
+INSERT INTO `crontab` VALUES ('2', '2', '测试二', '*/1 * * * *', '1', '/usr/local/php7/bin/php /home/Code/unitedCron/core/test2.php', '0', '1', 'vagrant', '0', '1478500162', '1478746296');
 INSERT INTO `crontab` VALUES ('3', '2', '测试三', '#', '5', '/usr/local/php7/bin/php /home/Code/unitedCron/core/test.php', '1', '1', 'vagrant', '0', '1478512199', '1478746304');
-INSERT INTO `crontab` VALUES ('4', '2', '测试四', '#', '1', '/usr/local/php7/bin/php /home/Code/unitedLog/index.php -edev', '1', '1', 'vagrant', '1', '1478512396', '1478742399');
-INSERT INTO `crontab` VALUES ('5', '1', '测试五', '#', '2', '/usr/local/php7/bin/php /home/Code/unitedCron/core/test.php', '1', '1', 'vagrant', '1', '1478513078', '1478746331');
+INSERT INTO `crontab` VALUES ('4', '2', '测试四', '#', '1', '/usr/local/php7/bin/php /home/Code/unitedLog/index.php -edev', '1', '1', 'vagrant', '0', '1478512396', '1478768901');
+INSERT INTO `crontab` VALUES ('5', '1', '测试五', '#', '5', '/usr/local/php7/bin/php /home/Code/unitedCron/core/test.php', '1', '1', 'vagrant', '0', '1478513078', '1478768914');
 
 -- ----------------------------
 -- Table structure for crontab_agent
@@ -647,7 +651,7 @@ CREATE TABLE `member` (
 -- ----------------------------
 -- Records of member
 -- ----------------------------
-INSERT INTO `member` VALUES ('1', 'admin', '0', '0000-00-00', '', '40', '11', '0', '1477900054', '3232249857', '1478660381', '1');
+INSERT INTO `member` VALUES ('1', 'admin', '0', '0000-00-00', '', '50', '15', '0', '1477900054', '3232249857', '1478839619', '1');
 
 -- ----------------------------
 -- Table structure for menu
@@ -667,13 +671,13 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`),
   KEY `status` (`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=126 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=134 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES ('1', '首页', '0', '1', 'Index/index', '0', '', '', '0', '1');
-INSERT INTO `menu` VALUES ('2', '内容', '0', '2', 'Article/index', '1', '', '', '0', '1');
+INSERT INTO `menu` VALUES ('1', '首页', '0', '2', 'Index/index', '1', '', '', '0', '1');
+INSERT INTO `menu` VALUES ('2', '内容', '0', '3', 'Article/index', '1', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('3', '文档列表', '2', '0', 'article/index', '1', '', '内容', '0', '1');
 INSERT INTO `menu` VALUES ('4', '新增', '3', '0', 'article/add', '0', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('5', '编辑', '3', '0', 'article/edit', '0', '', '', '0', '1');
@@ -687,7 +691,7 @@ INSERT INTO `menu` VALUES ('12', '导入', '3', '0', 'article/batchOperate', '0'
 INSERT INTO `menu` VALUES ('13', '回收站', '2', '0', 'article/recycle', '1', '', '内容', '0', '1');
 INSERT INTO `menu` VALUES ('14', '还原', '13', '0', 'article/permit', '0', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('15', '清空', '13', '0', 'article/clear', '0', '', '', '0', '1');
-INSERT INTO `menu` VALUES ('16', '用户', '0', '3', 'User/index', '0', '', '', '0', '1');
+INSERT INTO `menu` VALUES ('16', '用户', '0', '4', 'User/index', '0', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('17', '用户信息', '16', '0', 'User/index', '0', '', '用户管理', '0', '1');
 INSERT INTO `menu` VALUES ('18', '新增用户', '17', '0', 'User/add', '0', '添加新用户', '', '0', '1');
 INSERT INTO `menu` VALUES ('19', '用户行为', '16', '0', 'User/action', '0', '', '行为管理', '0', '1');
@@ -714,7 +718,7 @@ INSERT INTO `menu` VALUES ('39', '分类授权', '27', '0', 'AuthManager/categor
 INSERT INTO `menu` VALUES ('40', '保存分类授权', '27', '0', 'AuthManager/addToCategory', '0', '\"分类授权\"页面的\"保存\"按钮', '', '0', '1');
 INSERT INTO `menu` VALUES ('41', '模型授权', '27', '0', 'AuthManager/modelauth', '0', '\"后台 \\ 用户 \\ 权限管理\"列表页的\"模型授权\"操作按钮', '', '0', '1');
 INSERT INTO `menu` VALUES ('42', '保存模型授权', '27', '0', 'AuthManager/addToModel', '0', '\"分类授权\"页面的\"保存\"按钮', '', '0', '1');
-INSERT INTO `menu` VALUES ('43', '扩展', '0', '7', 'Addons/index', '1', '', '', '0', '1');
+INSERT INTO `menu` VALUES ('43', '扩展', '0', '6', 'Addons/index', '1', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('44', '插件管理', '43', '1', 'Addons/index', '0', '', '扩展', '0', '1');
 INSERT INTO `menu` VALUES ('45', '创建', '44', '0', 'Addons/create', '0', '服务器上创建插件结构向导', '', '0', '1');
 INSERT INTO `menu` VALUES ('46', '检测创建', '44', '0', 'Addons/checkForm', '0', '检测插件是否可以创建', '', '0', '1');
@@ -739,7 +743,7 @@ INSERT INTO `menu` VALUES ('64', '新增', '63', '0', 'Attribute/add', '0', '', 
 INSERT INTO `menu` VALUES ('65', '编辑', '63', '0', 'Attribute/edit', '0', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('66', '改变状态', '63', '0', 'Attribute/setStatus', '0', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('67', '保存数据', '63', '0', 'Attribute/update', '0', '', '', '0', '1');
-INSERT INTO `menu` VALUES ('68', '系统', '0', '4', 'Config/group', '0', '', '', '0', '1');
+INSERT INTO `menu` VALUES ('68', '系统', '0', '5', 'Config/group', '0', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('69', '网站设置', '68', '1', 'Config/group', '0', '', '系统设置', '0', '1');
 INSERT INTO `menu` VALUES ('70', '配置管理', '68', '4', 'Config/index', '0', '', '系统设置', '0', '1');
 INSERT INTO `menu` VALUES ('71', '编辑', '70', '0', 'Config/edit', '0', '新增编辑和保存配置', '', '0', '1');
@@ -764,7 +768,7 @@ INSERT INTO `menu` VALUES ('89', '修复表', '86', '0', 'Database/repair', '0',
 INSERT INTO `menu` VALUES ('90', '还原数据库', '68', '0', 'Database/index?type=import', '0', '', '数据备份', '0', '1');
 INSERT INTO `menu` VALUES ('91', '恢复', '90', '0', 'Database/import', '0', '数据库恢复', '', '0', '1');
 INSERT INTO `menu` VALUES ('92', '删除', '90', '0', 'Database/del', '0', '删除备份文件', '', '0', '1');
-INSERT INTO `menu` VALUES ('93', '任务', '0', '5', 'Task/index', '0', '任务中心', '', '0', '1');
+INSERT INTO `menu` VALUES ('93', '任务', '0', '1', 'Task/index', '0', '任务中心', '', '0', '1');
 INSERT INTO `menu` VALUES ('96', '新增', '75', '0', 'Menu/add', '0', '', '系统设置', '0', '1');
 INSERT INTO `menu` VALUES ('98', '编辑', '75', '0', 'Menu/edit', '0', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('106', '行为日志', '16', '0', 'Action/actionlog', '0', '', '行为管理', '0', '1');
@@ -785,6 +789,14 @@ INSERT INTO `menu` VALUES ('122', '数据列表', '58', '0', 'think/lists', '1',
 INSERT INTO `menu` VALUES ('123', '审核列表', '3', '0', 'Article/examine', '1', '', '', '0', '1');
 INSERT INTO `menu` VALUES ('124', '任务列表', '93', '0', 'Task/index', '0', '所有任务列表', '任务中心', '0', '1');
 INSERT INTO `menu` VALUES ('125', 'Agent列表', '93', '0', 'Task/agent', '0', '所有agent', '任务中心', '0', '1');
+INSERT INTO `menu` VALUES ('126', '新增任务', '124', '0', 'Task/add', '0', '新增脚本任务', '', '0', '1');
+INSERT INTO `menu` VALUES ('127', '编辑任务', '124', '0', 'Task/edit', '0', '编辑脚本任务方法', '', '0', '1');
+INSERT INTO `menu` VALUES ('128', '启用/停用任务', '124', '0', 'Task/changeStatus', '0', '启用/停用任务方法', '', '0', '1');
+INSERT INTO `menu` VALUES ('129', '删除任务', '124', '0', 'Task/del', '0', '删除脚本任务方法', '', '0', '1');
+INSERT INTO `menu` VALUES ('130', '新增agent', '125', '0', 'Task/addAgent', '0', '新增agent方法', '', '0', '1');
+INSERT INTO `menu` VALUES ('131', '编辑agent', '125', '0', 'Task/editAgent', '0', '编辑agent方法', '', '0', '1');
+INSERT INTO `menu` VALUES ('132', '启用/停用agent', '125', '0', 'Task/changeAgentStatus', '0', '启用/停用agent方法', '', '0', '1');
+INSERT INTO `menu` VALUES ('133', '删除agent', '125', '0', 'Task/delAgent', '0', '删除agent操作', '', '0', '1');
 
 -- ----------------------------
 -- Table structure for task_process
@@ -849,4 +861,4 @@ CREATE TABLE `ucenter_member` (
 -- ----------------------------
 -- Records of ucenter_member
 -- ----------------------------
-INSERT INTO `ucenter_member` VALUES ('1', 'admin', 'e30d8b00809ad1495ac7d1309a4a5c2e', 'admin@admin.com', '', '1477900054', '3232249857', '1478660381', '3232249857', '1477900054', '1');
+INSERT INTO `ucenter_member` VALUES ('1', 'admin', 'e30d8b00809ad1495ac7d1309a4a5c2e', 'admin@admin.com', '', '1477900054', '3232249857', '1478839619', '3232249857', '1477900054', '1');

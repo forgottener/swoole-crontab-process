@@ -1,5 +1,13 @@
 <extend name="Public/base"/>
+<block name="style">
+	<!-- Include Twitter Bootstrap and jQuery: -->
+	<link rel="stylesheet" href="__STATIC__/Multiselect/css/bootstrap-3.3.2.min.css" type="text/css"/>
+	<script type="text/javascript" src="__STATIC__/bootstrap/js/bootstrap.min.js"></script>
 
+	<!-- Include the plugin's CSS and JS: -->
+	<script type="text/javascript" src="__STATIC__/Multiselect/js/bootstrap-multiselect.js"></script>
+	<link rel="stylesheet" href="__STATIC__/Multiselect/css/bootstrap-multiselect.css" type="text/css"/>
+</block>
 <block name="body">
 	<div class="main-title">
 		<h2>{$info['id']?'编辑':'新增'}任务</h2>
@@ -22,6 +30,19 @@
 					</volist>
 				</select>
 			</div>
+		</div>
+
+		<div class="form-item">
+			<label class="item-label">agent<span class="check-tips">（执行命令的agent,可多选）</span></label>
+			<select id="mult_agent" name="agents[]" multiple="multiple">
+				<volist name="groupAgents" id="group_agent">
+					<optgroup label="{$Think.lang.$key}">
+						<volist name="group_agent" id="agent">
+							<option value="{$agent.id}" <eq name="agent.selected" value="1">selected="selected"</eq>>{$agent.name}({$agent.ip})</option>
+						</volist>
+					</optgroup>
+				</volist>
+			</select>
 		</div>
 
 		<div class="form-item">
@@ -65,15 +86,6 @@
 		</div>
 
 		<div class="form-item">
-			<label class="item-label">agent<span class="check-tips">（执行命令的agent Id,以英文半角","分隔,示例:  1,2）</span></label>
-			<div class="controls">
-				<label class="textarea input-large">
-					<textarea name="agents">{$info.agents|default=''}</textarea>
-				</label>
-			</div>
-		</div>
-
-		<div class="form-item">
 			<input type="hidden" name="id" value="{$info.id|default=''}">
 			<button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
 			<button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
@@ -87,5 +99,17 @@
 		Think.setValue("is_daemon", {$info.is_daemon|default=1});
 		//导航高亮
 		highlight_subnav('{:U('Task/index')}');
+
+		$(document).ready(function() {
+			$('#mult_agent').multiselect({
+				enableClickableOptGroups: true,
+				enableFiltering: true,
+				enableCollapsibleOptGroups: true,
+				includeSelectAllOption: true,
+				nonSelectedText:'未选择',
+				selectAllText: '全选',
+				allSelectedText: '已全选'
+			});
+		});
 	</script>
 </block>
