@@ -217,10 +217,10 @@ class Process
                     $diff = $nowProcssNum - $data['params']['process_num'];
                     $pids = array_rand($cron_process, $diff);
                     if ($diff == 1) {
-                        \swoole_process::kill($pids, SIGKILL);
+                        \swoole_process::kill($pids, SIGTERM);
                     } else {
                         foreach ($pids as $v) {
-                            \swoole_process::kill($v, SIGKILL);
+                            \swoole_process::kill($v, SIGTERM);
                         }
                     }
                     unset($diff, $pids, $nowProcssNum, $cron_process, $v);
