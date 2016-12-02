@@ -3,6 +3,7 @@ namespace App\Lib\Swoole;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use App\Lib\Swoole\Process;
 
 class AgentServer
 {
@@ -98,6 +99,12 @@ class AgentServer
      */
     public function onManagerStop($server)
     {
+        //当管理进程推出前需要删除所有在运行的任务,否则会造成僵尸进程,从Process内存表中读取
+        $process = Process::notify();
+        foreach ($process as $k => $v) {
+            \swoole_process::kill($k, SIGTERM);
+        }
+        unset($k, $v, $process);
         $this->monolog->info("ManagerStop;管理进程结束");
     }
 
